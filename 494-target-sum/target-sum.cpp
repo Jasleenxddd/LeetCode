@@ -40,25 +40,51 @@ public:
     // }
 
     // using tabulation
-    int findTargetSumWays(vector<int>& nums, int d) {
-        int n=nums.size();
-        int sum=accumulate(nums.begin(), nums.end(), 0);
+    // int findTargetSumWays(vector<int>& nums, int d) {
+    //     int n=nums.size();
+    //     int sum=accumulate(nums.begin(), nums.end(), 0);
+    //     int target=(sum-d)/2;
+    //     if(sum-d<0 || (sum-d)%2!=0) return 0;
+    //     vector<vector<int>> dp(n, vector<int> (target+1, 0));
+    //     if(nums[0]==0) dp[0][0]=2;
+    //     else{
+    //         dp[0][0]=1;
+    //         if( nums[0]<=target) dp[0][nums[0]]=1;
+    //     }
+    //     for(int i=1; i<n;i++){
+    //         for(int sum=0; sum<=target;sum++){
+    //             int notPick=dp[i-1][sum];
+    //             int pick=0;
+    //             if(nums[i]<=sum) pick=dp[i-1][sum-nums[i]];
+    //             dp[i][sum]= pick+notPick;
+    //         }
+    //     }
+    //     return dp[n-1][target];
+    // }
+
+    // using space optimization
+    int findTargetSumWays(vector<int>& arr, int d) {
+        // Code here
+        int n=arr.size();
+        int sum=accumulate(arr.begin(), arr.end(), 0);
         int target=(sum-d)/2;
         if(sum-d<0 || (sum-d)%2!=0) return 0;
-        vector<vector<int>> dp(n, vector<int> (target+1, 0));
-        if(nums[0]==0) dp[0][0]=2;
+        vector<int> prev(target+1, 0), curr(target+1, 0);
+        
+        if(arr[0]==0) prev[0]=2;
         else{
-            dp[0][0]=1;
-            if( nums[0]<=target) dp[0][nums[0]]=1;
+            prev[0]=1;
+            if( arr[0]<=target) prev[arr[0]]=1;
         }
         for(int i=1; i<n;i++){
             for(int sum=0; sum<=target;sum++){
-                int notPick=dp[i-1][sum];
+                int notPick=prev[sum];
                 int pick=0;
-                if(nums[i]<=sum) pick=dp[i-1][sum-nums[i]];
-                dp[i][sum]= pick+notPick;
+                if(arr[i]<=sum) pick=prev[sum-arr[i]];
+                curr[sum]= pick+notPick;
             }
+            prev=curr;
         }
-        return dp[n-1][target];
+        return prev[target];
     }
 };
