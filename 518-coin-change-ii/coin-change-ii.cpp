@@ -1,6 +1,7 @@
 class Solution {
 public:
     int f(int i, int amount, vector<int>& coins, vector<vector<int>>& dp){
+        if(amount==0) return 1;
         if(i==0){
             if(amount%coins[0]==0) return 1;
             else return 0;
