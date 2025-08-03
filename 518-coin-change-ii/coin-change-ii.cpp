@@ -39,25 +39,45 @@ public:
     //     return (int)dp[n-1][amount];
     // }
 
+    // using space optimization
+    // int change(int amount, vector<int>& coins) {
+    //     const int MOD=1e9+7;
+    //     int n=coins.size();
+    //     vector<long long> prev(amount+1, 0);
+    //     for(int t=0; t<=amount; t++){
+    //         if(t%coins[0]==0) prev[t]=1;
+    //     }
+    //     for(int i=1; i<n; i++){
+    //         vector<long long> curr(amount+1, 0);
+    //         for(int t=0; t<=amount; t++){
+    //             long long notPick=prev[t];
+    //             long long pick=0;
+    //             if(coins[i]<=t) pick=curr[t-coins[i]];
+    //             curr[t]=pick+notPick;
+    //             // to prevent overflow condition
+    //             if(curr[t]> INT_MAX) curr[t]= INT_MAX; 
+    //         }
+    //         prev=curr;
+    //     }
+    //     return (int)prev[amount];
+    // }
+
+    // using 1d array
     int change(int amount, vector<int>& coins) {
         const int MOD=1e9+7;
         int n=coins.size();
-        vector<long long> prev(amount+1, 0);
+        vector<long long> dp(amount+1, 0);
         for(int t=0; t<=amount; t++){
-            if(t%coins[0]==0) prev[t]=1;
+            if(t%coins[0]==0) dp[t]=1;
         }
         for(int i=1; i<n; i++){
             vector<long long> curr(amount+1, 0);
             for(int t=0; t<=amount; t++){
-                long long notPick=prev[t];
-                long long pick=0;
-                if(coins[i]<=t) pick=curr[t-coins[i]];
-                curr[t]=pick+notPick;
+                if(coins[i]<=t) dp[t]=dp[t]+dp[t-coins[i]];
                 // to prevent overflow condition
-                if(curr[t]> INT_MAX) curr[t]= INT_MAX; 
+                if(dp[t]> INT_MAX) dp[t]= INT_MAX; 
             }
-            prev=curr;
         }
-        return (int)prev[amount];
+        return (int)dp[amount];
     }
 };
