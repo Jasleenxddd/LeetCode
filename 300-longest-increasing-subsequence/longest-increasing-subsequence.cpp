@@ -55,16 +55,65 @@ public:
     // }
 
     // for tracing back
-    int lengthOfLIS(vector<int>& nums) {
-        int n=nums.size();
-        int maxi=0;
-        vector<int> dp(n, 1);
-        for(int i=0; i<n; i++){
-            for(int prev=0; prev<i; prev++){
-                if( nums[i]> nums[prev]) dp[i]=max(dp[i], 1+dp[prev]);
+    // int lengthOfLIS(vector<int>& nums) {
+    //     int n=nums.size();
+    //     int maxi=0;
+    //     vector<int> dp(n, 1);
+    //     for(int i=0; i<n; i++){
+    //         for(int prev=0; prev<i; prev++){
+    //             if( nums[i]> nums[prev]) dp[i]=max(dp[i], 1+dp[prev]);
+    //         }
+    //        maxi=max(maxi, dp[i]);
+    //     }
+    //     return maxi;
+    // }
+
+    // printing the array
+    // int lengthOfLIS(vector<int>& nums) {
+    //     int n=nums.size();
+    //     int maxi=0;
+    //     int lastI=0;
+    //     vector<int> dp(n, 1), hash(n);
+    //     for(int i=0; i<n; i++){
+    //         hash[i]=i;
+    //         for(int prev=0; prev<i; prev++){
+    //             if( nums[i]> nums[prev] && 1+dp[prev]>dp[i]){
+    //                 dp[i]=1+dp[prev];
+    //                 hash[i]=prev;
+    //             }
+    //         }
+    //         if(dp[i]>maxi){
+    //             maxi=dp[i];
+    //             lastI=i;
+    //         }
+    //     }
+    //     vector<int> tmp;
+    //     tmp.push_back(nums[lastI]);
+    //     while(hash[lastI]!=lastI){
+    //         lastI=hash[lastI];
+    //         tmp.push_back(nums[lastI]);
+    //     }
+    //     reverse(tmp.begin(), tmp.end());
+    //     for(auto it: tmp){
+    //         cout<<it<<" ";
+    //     }
+    //     cout<<endl;
+    //     return maxi;
+    // }
+
+    // using binary search
+    int lengthOfLIS(vector<int>& nums){
+        vector<int> tmp;
+        if(nums.empty()) return 0;
+        tmp.push_back(nums[0]);
+        for(int i=1; i<nums.size(); i++){
+            if(nums[i]> tmp.back()) tmp.push_back(nums[i]);
+            else{
+                auto it=lower_bound(tmp.begin(), tmp.end(), nums[i]);
+                *it=nums[i];
             }
-           maxi=max(maxi, dp[i]);
         }
-        return maxi;
+        return tmp.size();
     }
+
 };
